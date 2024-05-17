@@ -2,7 +2,7 @@
     position: fixed;
     transform: translate(-50%, -50%);
     left: 50%;
-    bottom: 7%;
+    bottom: 5%;
     cursor: -webkit-grab;
 }
 

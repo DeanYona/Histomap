@@ -6,7 +6,7 @@ export const TimeDisplay = ({ year }) => {
 
     return (
         <div className="year-container">
-            <h1>{year}</h1>
+            <h1>{Math.floor(year)}</h1>
         </div>
     );
 };
