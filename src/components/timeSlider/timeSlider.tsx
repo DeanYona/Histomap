@@ -1,16 +1,21 @@
-import React, { ChangeEvent, FC, useEffect, useState } from "react";
+import React, {
+    ChangeEvent,
+    FC,
+    useCallback,
+    useEffect,
+    useState,
+} from "react";
 import "./timeSlider.css";
 
 interface TimeSlider {
-    min: string;
-    max: string;
-    step: string;
-    onChange: string;
+    year: number;
+    changeYear: (newYear: number) => void;
 }
 
-export const TimeSlider: FC<TimeSlider> = ({ year, setYear }) => {
+export const TimeSlider: FC<TimeSlider> = ({ year, changeYear }) => {
     const DEFAULT_VALUE = 50;
     const [sliderValue, setSliderValue] = useState(DEFAULT_VALUE);
+    const [isDragging, setIsDragging] = useState(false);
 
     const lerp = (start, end, t) => {
         return start * (1 - t) + end * t;
@@ -49,25 +54,36 @@ export const TimeSlider: FC<TimeSlider> = ({ year, setYear }) => {
         }
     };
 
+    const updateYearContinuously = useCallback(() => {
+        let sliderAmount = sliderValue - DEFAULT_VALUE;
+        let newYear = year + updateYearsRate(sliderAmount);
+        changeYear(newYear);
+    }, [sliderValue, year, changeYear]);
+
     useEffect(() => {
         const interval = setInterval(() => {
             if (sliderValue !== DEFAULT_VALUE) {
-                let sliderAmount = sliderValue - DEFAULT_VALUE;
-                // console.log(sliderAmount);
-                // console.log(updateYearsRate(sliderAmount));
-                setYear((prevYear) => prevYear + updateYearsRate(sliderAmount));
+                // let sliderAmount = sliderValue - DEFAULT_VALUE;
+                // let yearsAmount = updateYearsRate(sliderAmount);
+                // let newYear = year + yearsAmount;
+                // // console.log(yearsAmount);
+                // // console.log(updateYearsRate(sliderAmount));
+                // changeYear(newYear);
+                updateYearContinuously(sliderValue);
             }
         }, 10);
         return () => clearInterval(interval);
-    }, [sliderValue]);
+    }, [sliderValue, updateYearContinuously]);
 
     const handleSliderChange = (e) => {
-        let newValue = e.target.value;
+        let newValue = parseInt(e.target.value);
         setSliderValue(newValue);
+        setIsDragging(true);
     };
 
-    const handleMouseUup = (e) => {
+    const handleMouseUp = (e) => {
         setSliderValue(DEFAULT_VALUE);
+        setIsDragging(false);
     };
 
     return (
@@ -77,10 +93,10 @@ export const TimeSlider: FC<TimeSlider> = ({ year, setYear }) => {
                 min={0}
                 max={100}
                 value={sliderValue}
-                className="slider"
+                className={isDragging ? "slider dragging" : "slider"}
                 id="myRange"
                 onChange={handleSliderChange}
-                onMouseUp={handleMouseUup}
+                onMouseUp={handleMouseUp}
             />
         </div>
     );
