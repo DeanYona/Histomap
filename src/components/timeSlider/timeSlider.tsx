@@ -3,9 +3,11 @@ import React, {
     FC,
     useCallback,
     useEffect,
+    useRef,
     useState,
 } from "react";
 import "./timeSlider.css";
+import { YearsScale } from "./yearsScale/yearsScale";
 
 interface TimeSlider {
     year: number;
@@ -16,6 +18,8 @@ export const TimeSlider: FC<TimeSlider> = ({ year, changeYear }) => {
     const DEFAULT_VALUE = 50;
     const [sliderValue, setSliderValue] = useState(DEFAULT_VALUE);
     const [isDragging, setIsDragging] = useState(false);
+    const sliderRef = useRef<HTMLInputElement>(null);
+    const [thumbPosition, setThumbPosition] = useState(null);
 
     const lerp = (start, end, t) => {
         return start * (1 - t) + end * t;
@@ -86,8 +90,27 @@ export const TimeSlider: FC<TimeSlider> = ({ year, changeYear }) => {
         setIsDragging(false);
     };
 
+    const calculateThumbPosition = () => {
+        if (sliderRef.current) {
+            const { min, max, value, offsetWidth } = sliderRef.current;
+            const percent =
+                (parseInt(value) - parseInt(min)) /
+                (parseInt(max) - parseInt(min));
+            const thumbPosition = percent * offsetWidth;
+            return thumbPosition;
+        }
+        return 0;
+    };
+
+    useEffect(() => {
+        if (isDragging) {
+            setThumbPosition(calculateThumbPosition());
+        }
+    }, [sliderValue]);
+
     return (
         <div className="time-slider">
+            {/* <YearsScale year={year} thumbPosition={thumbPosition} /> */}
             <input
                 type="range"
                 min={0}
@@ -97,6 +120,7 @@ export const TimeSlider: FC<TimeSlider> = ({ year, changeYear }) => {
                 id="myRange"
                 onChange={handleSliderChange}
                 onMouseUp={handleMouseUp}
+                ref={sliderRef}
             />
         </div>
     );

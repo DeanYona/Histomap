@@ -5,14 +5,19 @@ import { TimeSlider } from "./components/timeSlider/timeSlider";
 import "./App.css";
 import { TimeDisplay } from "./components/timeDisplay/timeDisplay";
 import useChangeYear from "./hooks/useChangeYear";
+import { Sidebar } from "./components/sidebar/sidebar";
 
 function App() {
-    // const [year, setYear] = useState(1500);
     const [year, changeYear] = useChangeYear(1500);
+    const [currentAppState, setCurrentAppState] = useState("Watch History");
 
     return (
         <>
             <Mymap />
+            <Sidebar
+                currentAppState={currentAppState}
+                setCurrentAppState={setCurrentAppState}
+            />
             <TimeSlider year={year} changeYear={changeYear} />
             <TimeDisplay year={year} changeYear={changeYear} />
         </>

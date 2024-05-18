@@ -1,0 +1,7 @@
+.years-scale {
+    position: absolute;
+    /* bottom: 15px; */
+    transform: translateX(-50%);
+    bottom: 100%;
+    margin-bottom: 10px;
+}
