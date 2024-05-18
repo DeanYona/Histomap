@@ -5,7 +5,7 @@ import { TimeSlider } from "./components/timeSlider/timeSlider";
 import "./App.css";
 import { TimeDisplay } from "./components/timeDisplay/timeDisplay";
 import useChangeYear from "./hooks/useChangeYear";
-import { Sidebar } from "./components/sidebar/sidebar";
+import { AppStates } from "./components/appStates/appStates";
 
 function App() {
     const [year, changeYear] = useChangeYear(1500);
@@ -14,7 +14,7 @@ function App() {
     return (
         <>
             <Mymap />
-            <Sidebar
+            <AppStates
                 currentAppState={currentAppState}
                 setCurrentAppState={setCurrentAppState}
             />
