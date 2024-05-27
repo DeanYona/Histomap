@@ -23,7 +23,13 @@ export const AppStates = ({ currentAppState, setCurrentAppState }) => {
                 onMouseLeave={handleMouseLeave}
             >
                 <button>{currentAppState}</button>
-                {isAppStates ? <button>{otherState}</button> : null}
+                {isAppStates ? (
+                    <button
+                        onClick={(e) => setCurrentAppState(e.target.innerText)}
+                    >
+                        {otherState}
+                    </button>
+                ) : null}
             </div>
         </>
     );
